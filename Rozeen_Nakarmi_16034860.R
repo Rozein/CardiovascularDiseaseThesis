@@ -14,7 +14,6 @@ library(gridExtra)
 library(randomForest)
 library(tree)
 library(xgboost)
-library(ROCR)
 library(naivebayes)
 library(tidyverse)
 library(caret)
@@ -558,7 +557,7 @@ predictions_rf <- predict(model_rf, newdata = test_data)
 conf_matrix <- table(predictions_rf, test_data$cardio)
 print("Confusion Matrix:")
 print(conf_matrix)
-# Calculate accuracy, sensitivity, specificity, etc.
+# Calculate accuracy
 accuracy <- sum(diag(conf_matrix)) / sum(conf_matrix)
 accuracy
 print(paste("Accuracy:", round(accuracy * 100,2)))
@@ -574,7 +573,6 @@ train_data <- cardio_data_filtered_scaled[split_index, ]
 test_data <- cardio_data_filtered_scaled[-split_index, ]
 
 # Build a decision tree model
-#model_tree <- tree(cardio ~ gender + height + weight + ap_hi + ap_lo + cholesterol + gluc + smoke + alco + active + years + bmi, data = train_data)
 model_tree <- tree(cardio ~ cholesterol + gluc + active + years + bmi + ap_hi + ap_lo, data = train_data)
 
 # Make predictions on the testing data
@@ -617,7 +615,7 @@ prediction_obj <- prediction(predictions_xgb, test_data$cardio)
 confusionMatrix(factor(predictions_xgb_class), factor(test_data$cardio))
 # Compare predicted labels to actual labels
 accuracy <- sum(predictions_xgb_class == test_data$cardio) / length(test_data$cardio)
-
+#Prediction Accuracy
 print(paste("Accuracy:", round(accuracy*100 ,2)))
 
 ##Naive Bayes Classifier
